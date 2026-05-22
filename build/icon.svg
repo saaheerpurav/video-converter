@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Video Converter">
+  <rect width="1024" height="1024" rx="224" fill="#0f172a"/>
+  <rect x="176" y="248" width="672" height="408" rx="72" fill="#1e293b" stroke="#3b82f6" stroke-width="44"/>
+  <path d="M440 366v172l150-86-150-86z" fill="#f8fafc"/>
+  <path d="M282 754h322" stroke="#38bdf8" stroke-width="56" stroke-linecap="round"/>
+  <path d="M626 700l116 54-116 54" fill="none" stroke="#38bdf8" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,70 @@
+{
+  "name": "video-converter",
+  "version": "0.1.0",
+  "description": "Offline desktop media compression and conversion utility.",
+  "author": "Saaheer Purav",
+  "main": "dist-electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build:electron && concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .\"",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build": "npm run build:electron && vite build",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.electron.json --noEmit",
+    "package": "npm run build && electron-builder",
+    "package:win": "npm run build && electron-builder --win --x64 --publish never",
+    "package:mac": "npm run build && electron-builder --mac --x64 --publish never",
+    "package:mac:config": "node scripts/validate-mac-config.mjs"
+  },
+  "dependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.22",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^39.2.4",
+    "electron-builder": "^26.0.12",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "wait-on": "^9.0.3"
+  },
+  "build": {
+    "appId": "com.personal.video-converter",
+    "productName": "Video Converter",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "build/icon.png",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "mac": {
+      "icon": "build/icon.icns",
+      "target": "dmg",
+      "category": "public.app-category.video"
+    },
+    "asar": true
+  }
+}
