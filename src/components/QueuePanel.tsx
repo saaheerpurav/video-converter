@@ -7,10 +7,10 @@ export function QueuePanel() {
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-slate-700 bg-slate-950/50 p-8 text-center">
+      <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-stone-700 bg-stone-950/50 p-8 text-center">
         <div>
           <p className="text-base font-semibold text-white">No videos queued</p>
-          <p className="mt-1 max-w-md text-sm text-slate-400">Add videos from the left panel to begin compression.</p>
+          <p className="mt-1 max-w-md text-sm text-stone-400">Add files from the left panel to begin processing.</p>
         </div>
       </div>
     );
@@ -19,7 +19,7 @@ export function QueuePanel() {
   return (
     <div className="min-h-0 flex-1 space-y-2 overflow-auto pr-1">
       {items.map((item) => (
-        <article key={item.id} className="rounded-lg border border-slate-800 bg-slate-950 p-3 shadow-sm">
+        <article key={item.id} className="rounded-xl border border-stone-800 bg-stone-950 p-3 shadow-sm">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
@@ -27,7 +27,7 @@ export function QueuePanel() {
                 <StatusPill status={item.status} />
                 <TaskPill mode={item.mode} targetFormat={item.targetFormat} />
               </div>
-              <p className="mt-1 truncate text-xs text-slate-500">{item.path}</p>
+              <p className="mt-1 truncate text-xs text-stone-500">{item.path}</p>
 
               <div className="mt-3 grid gap-2 text-sm sm:grid-cols-2 xl:grid-cols-4">
                 <Metric label="Original" value={formatBytes(item.size)} />
@@ -43,17 +43,17 @@ export function QueuePanel() {
           </div>
 
           <div className="mt-3">
-            <div className="mb-1.5 flex items-center justify-between text-xs text-slate-400">
+            <div className="mb-1.5 flex items-center justify-between text-xs text-stone-400">
               <span>{item.status === "done" ? "Done" : `${Math.round(item.progress)}%`}</span>
               <span>
                 Elapsed {formatElapsed(item.elapsedMs)}
                 {item.status === "processing" && ` | ETA ${formatEta(item.etaMs)}`}
               </span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+            <div className="h-2 overflow-hidden rounded-full bg-stone-800">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${
-                  item.status === "done" ? "bg-emerald-500" : "bg-blue-500"
+                  item.status === "done" ? "bg-emerald-500" : "bg-amber-500"
                 }`}
                 style={{ width: `${item.progress}%` }}
               />
@@ -61,7 +61,7 @@ export function QueuePanel() {
           </div>
 
           {(item.status === "done" || item.status === "failed" || item.status === "cancelled") && (
-            <div className="mt-3 rounded-lg bg-slate-900 px-3 py-2 text-sm">
+            <div className="mt-3 rounded-lg bg-stone-900 px-3 py-2 text-sm">
               {item.status === "done" ? (
                 <div className="grid gap-2 md:grid-cols-3">
                   {item.mode === "compress" ? (
@@ -91,8 +91,8 @@ export function QueuePanel() {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="text-[10px] font-medium uppercase tracking-wide text-slate-500">{label}</p>
-      <p className="mt-0.5 truncate font-medium text-slate-200">{value}</p>
+      <p className="text-[10px] font-medium uppercase tracking-wide text-stone-500">{label}</p>
+      <p className="mt-0.5 truncate font-medium text-stone-200">{value}</p>
     </div>
   );
 }
@@ -108,7 +108,7 @@ function TaskPill({ mode, targetFormat }: { mode: string; targetFormat?: string 
           : `Extract ${targetFormat?.toUpperCase() ?? ""}`;
 
   return (
-    <span className="rounded-full bg-slate-900 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-300">
+    <span className="rounded-full bg-stone-900 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-stone-300">
       {label}
     </span>
   );
@@ -116,8 +116,8 @@ function TaskPill({ mode, targetFormat }: { mode: string; targetFormat?: string 
 
 function StatusPill({ status }: { status: string }) {
   const classes: Record<string, string> = {
-    queued: "bg-slate-800 text-slate-300",
-    processing: "bg-blue-950 text-blue-200",
+    queued: "bg-stone-800 text-stone-300",
+    processing: "bg-amber-950 text-amber-200",
     done: "bg-emerald-950 text-emerald-200",
     failed: "bg-red-950 text-red-200",
     cancelled: "bg-amber-950 text-amber-200"

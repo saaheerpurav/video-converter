@@ -6,7 +6,6 @@ import type {
   ConversionOutputFormat,
   ExtractionOutputFormat,
   HardwareAcceleration,
-  TaskMode,
   VideoCodec
 } from "../types/media";
 
@@ -26,13 +25,6 @@ const accelerationOptions: Array<{ value: HardwareAcceleration; label: string }>
   { value: "nvenc", label: "NVIDIA NVENC" },
   { value: "qsv", label: "Intel QuickSync" },
   { value: "amf", label: "AMD AMF" }
-];
-
-const modeOptions: Array<{ value: TaskMode; label: string; description: string }> = [
-  { value: "compress", label: "Compress", description: "Reduce video size" },
-  { value: "convert", label: "Convert", description: "Change media format" },
-  { value: "extract", label: "Extract Audio", description: "Export audio from video" },
-  { value: "caption", label: "Generate Captions", description: "Burn captions into video" }
 ];
 
 const conversionOptions: Array<{ value: ConversionOutputFormat; label: string }> = [
@@ -66,41 +58,29 @@ export function CompressionSettingsPanel() {
   ]
     .filter(Boolean)
     .join(", ");
+  const title =
+    settings.mode === "compress"
+      ? "Compression Settings"
+      : settings.mode === "convert"
+        ? "Conversion Settings"
+        : settings.mode === "caption"
+          ? "Caption Settings"
+          : "Audio Settings";
 
   const updateCaptionSettings = (partial: Partial<typeof captions>) => {
     void updateSettings({ captions: { ...captions, ...partial } });
   };
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-sm">
+    <div className="rounded-2xl border border-stone-800/80 bg-stone-950/75 p-4 shadow-2xl shadow-black/20 backdrop-blur">
       <div className="mb-4">
         <div>
-          <h2 className="text-base font-semibold text-white">Task Settings</h2>
-          <p className="mt-1 text-sm text-slate-400">Choose a workflow, then add files to the queue.</p>
+          <h2 className="text-base font-semibold text-white">{title}</h2>
+          <p className="mt-1 text-sm text-stone-400">Configure the selected workflow before starting the queue.</p>
         </div>
       </div>
 
       <div className="space-y-4">
-        <div>
-          <label className="field-label">Mode</label>
-          <div className="grid gap-2">
-            {modeOptions.map((option) => (
-              <button
-                key={option.value}
-                className={`rounded-lg border px-3 py-2 text-left transition ${
-                  settings.mode === option.value
-                    ? "border-blue-500 bg-blue-950/60 text-blue-100"
-                    : "border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700"
-                }`}
-                onClick={() => void updateSettings({ mode: option.value })}
-              >
-                <span className="block text-sm font-semibold">{option.label}</span>
-                <span className="mt-0.5 block text-xs text-slate-400">{option.description}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {settings.mode === "compress" && (
           <div className="space-y-4 pt-1">
             <div>
@@ -111,13 +91,13 @@ export function CompressionSettingsPanel() {
                     key={option.value}
                     className={`rounded-lg border px-3 py-2 text-left transition ${
                       settings.preset === option.value
-                        ? "border-blue-500 bg-blue-950/60 text-blue-100"
-                        : "border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700"
+                        ? "border-amber-500 bg-amber-950/30 text-amber-100"
+                        : "border-stone-800 bg-stone-950 text-stone-300 hover:border-stone-700"
                     }`}
                     onClick={() => void updateSettings({ preset: option.value })}
                   >
                     <span className="block text-sm font-semibold">{option.label}</span>
-                    <span className="mt-0.5 block text-xs text-slate-400">{option.description}</span>
+                    <span className="mt-0.5 block text-xs text-stone-400">{option.description}</span>
                   </button>
                 ))}
               </div>
@@ -156,22 +136,22 @@ export function CompressionSettingsPanel() {
             </div>
 
             {capabilities && (
-              <div className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2">
+              <div className="rounded-lg border border-stone-800 bg-stone-950 px-3 py-2">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-xs font-semibold text-slate-300">Hardware Encoding</span>
-                  <span className="text-xs text-slate-500">{capabilities.platform}</span>
+                  <span className="text-xs font-semibold text-stone-300">Hardware Encoding</span>
+                  <span className="text-xs text-stone-500">{capabilities.platform}</span>
                 </div>
                 <div className="mt-2 space-y-1.5">
                   {capabilities.encoders.map((encoder) => (
                     <div key={encoder.id} className="flex items-start justify-between gap-3 text-xs">
-                      <span className="font-medium text-slate-300">{encoder.label}</span>
-                      <span className={encoder.usable ? "text-emerald-300" : "text-slate-500"}>
+                      <span className="font-medium text-stone-300">{encoder.label}</span>
+                      <span className={encoder.usable ? "text-emerald-300" : "text-stone-500"}>
                         {encoder.usable ? "Usable" : encoder.compiled ? "Unavailable" : "Not compiled"}
                       </span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-2 text-xs leading-5 text-slate-500">
+                <p className="mt-2 text-xs leading-5 text-stone-500">
                   Recommended: {capabilities.recommendedAcceleration === "none" ? "CPU" : capabilities.recommendedAcceleration.toUpperCase()}
                 </p>
               </div>
@@ -195,7 +175,7 @@ export function CompressionSettingsPanel() {
                 </option>
               ))}
             </select>
-            <span className="mt-2 block text-xs leading-5 text-slate-500">
+            <span className="mt-2 block text-xs leading-5 text-stone-500">
               Supported: MP4/MOV/MKV pairs, WEBM/AVI to MP4, MP4/MOV to MP3, WAV/MP3, and FLAC/MP3.
             </span>
           </label>
@@ -222,11 +202,11 @@ export function CompressionSettingsPanel() {
 
         {settings.mode === "caption" && (
           <div className="space-y-4 pt-1">
-            <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">
+            <div className="rounded-lg border border-stone-800 bg-stone-950 p-3">
               <div className="mb-3">
                 <span className="field-label">Text Preview</span>
                 <div
-                  className={`relative flex h-40 overflow-hidden rounded-lg border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 p-4 ${
+                  className={`relative flex h-40 overflow-hidden rounded-lg border border-stone-800 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-950 p-4 ${
                     captions.position === "top"
                       ? "items-start"
                       : captions.position === "center"
@@ -305,17 +285,17 @@ export function CompressionSettingsPanel() {
             </div>
 
             <div className="grid gap-3">
-              <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">
+              <div className="rounded-lg border border-stone-800 bg-stone-950 p-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <span className="field-label mb-0">Shadow</span>
-                    <p className="mt-1 text-xs text-slate-500">Adds depth behind burned captions.</p>
+                    <p className="mt-1 text-xs text-stone-500">Adds depth behind burned captions.</p>
                   </div>
                   <button
                     className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                       captions.shadowEnabled
-                        ? "bg-blue-600 text-white"
-                        : "border border-slate-700 bg-slate-900 text-slate-300"
+                        ? "bg-amber-500 text-stone-950"
+                        : "border border-stone-700 bg-stone-900 text-stone-300"
                     }`}
                     onClick={() => updateCaptionSettings({ shadowEnabled: !captions.shadowEnabled })}
                     type="button"
@@ -417,11 +397,11 @@ function FontPicker({
         <span className="truncate" style={{ fontFamily: value }}>
           {value}
         </span>
-        <span className="text-xs text-slate-500">{open ? "Close" : "Search"}</span>
+        <span className="text-xs text-stone-500">{open ? "Close" : "Search"}</span>
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full z-20 mt-2 rounded-lg border border-slate-700 bg-slate-950 p-2 shadow-xl">
+        <div className="absolute left-0 right-0 top-full z-20 mt-2 rounded-lg border border-stone-700 bg-stone-950 p-2 shadow-xl">
           <input
             autoFocus
             className="field-control mb-2 w-full"
@@ -433,8 +413,8 @@ function FontPicker({
             {options.length > 0 ? (
               options.map((font) => (
                 <button
-                  className={`block w-full rounded-md px-2 py-1.5 text-left text-sm transition hover:bg-slate-800 ${
-                    font === value ? "bg-blue-950 text-blue-100" : "text-slate-200"
+                  className={`block w-full rounded-md px-2 py-1.5 text-left text-sm transition hover:bg-stone-900 ${
+                    font === value ? "bg-amber-950/50 text-amber-100" : "text-stone-200"
                   }`}
                   key={font}
                   onClick={() => {
@@ -449,7 +429,7 @@ function FontPicker({
                 </button>
               ))
             ) : (
-              <p className="px-2 py-3 text-sm text-slate-500">No matching fonts found.</p>
+              <p className="px-2 py-3 text-sm text-stone-500">No matching fonts found.</p>
             )}
           </div>
         </div>

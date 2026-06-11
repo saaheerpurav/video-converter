@@ -25,8 +25,8 @@ export function DropZone({ onBrowse, onPaths, isLoading }: DropZoneProps) {
     <div
       className={`rounded-xl border p-4 transition ${
         isDragging
-          ? "border-blue-500 bg-blue-950/50"
-          : "border-slate-800 bg-slate-900 hover:border-blue-700"
+          ? "border-amber-500 bg-amber-950/30"
+          : "border-stone-800 bg-stone-950/80 hover:border-amber-700"
       }`}
       onDragOver={(event) => {
         event.preventDefault();
@@ -37,7 +37,7 @@ export function DropZone({ onBrowse, onPaths, isLoading }: DropZoneProps) {
     >
       <div>
         <h2 className="text-base font-semibold text-white">Add media</h2>
-        <p className="mt-1 text-sm leading-5 text-slate-400">Drop files here or choose video/audio files for the selected task.</p>
+        <p className="mt-1 text-sm leading-5 text-stone-400">Drop files here or choose video/audio files for the selected task.</p>
         <button className="btn-primary mt-4 w-full" onClick={onBrowse} disabled={isLoading}>
           {isLoading ? "Reading files..." : "Choose Files"}
         </button>

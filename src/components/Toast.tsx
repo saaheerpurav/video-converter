@@ -16,7 +16,7 @@ export function Toast({ toast, onClose }: ToastProps) {
   const tone = {
     success: "border-emerald-800 bg-emerald-950 text-emerald-100",
     error: "border-red-800 bg-red-950 text-red-100",
-    info: "border-blue-800 bg-blue-950 text-blue-100"
+    info: "border-amber-800 bg-amber-950 text-amber-100"
   }[toast.type];
 
   return (

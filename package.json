@@ -1,6 +1,6 @@
 {
   "name": "video-converter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Offline desktop media compression and conversion utility.",
   "author": "Saaheer Purav",
   "main": "dist-electron/main.js",
