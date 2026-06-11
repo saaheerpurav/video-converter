@@ -7,6 +7,7 @@ import {
   startCompression,
   startMediaJob
 } from "./ffmpeg";
+import { listSystemFonts } from "./fonts";
 import { readSettings, writeSettings } from "./settings";
 import type { AppSettings, StartCompressionPayload, StartMediaJobPayload } from "./types";
 
@@ -100,6 +101,8 @@ function registerIpc() {
   });
 
   ipcMain.handle("ffmpeg:get-capabilities", async () => getCapabilities());
+
+  ipcMain.handle("fonts:list", async () => listSystemFonts());
 
   ipcMain.handle("settings:get", async () => readSettings());
 

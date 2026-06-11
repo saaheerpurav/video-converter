@@ -17,6 +17,7 @@ export type MediaApi = {
   getPathForFile: (file: File) => string;
   analyzeFiles: (paths: string[]) => Promise<MediaFileInfo[]>;
   getCapabilities: () => Promise<EncoderCapabilities>;
+  listFonts: () => Promise<string[]>;
   startCompression: (payload: StartCompressionPayload) => Promise<CompressionStarted>;
   startMediaJob: (payload: StartMediaJobPayload) => Promise<CompressionStarted>;
   cancelCompression: (jobId: string) => Promise<boolean>;

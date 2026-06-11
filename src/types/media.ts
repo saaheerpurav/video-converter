@@ -1,9 +1,10 @@
 export type CompressionPreset = "high" | "balanced" | "small";
 export type VideoCodec = "h264" | "h265";
 export type HardwareAcceleration = "auto" | "none" | "nvenc" | "qsv" | "amf";
-export type TaskMode = "compress" | "convert" | "extract";
+export type TaskMode = "compress" | "convert" | "extract" | "caption";
 export type ConversionOutputFormat = "mp4" | "mov" | "mkv" | "mp3" | "wav" | "flac";
 export type ExtractionOutputFormat = "mp3" | "wav" | "aac";
+export type CaptionPosition = "bottom" | "center" | "top";
 
 export type CompressionSettings = {
   preset: CompressionPreset;
@@ -12,10 +13,24 @@ export type CompressionSettings = {
   outputFolder: string;
 };
 
+export type CaptionSettings = {
+  maxDuration: number;
+  font: string;
+  fontSize: number;
+  fontColor: string;
+  outlineColor: string;
+  shadowEnabled: boolean;
+  shadowColor: string;
+  position: CaptionPosition;
+  marginV: number;
+  maxChars: number;
+};
+
 export type AppSettings = CompressionSettings & {
   mode: TaskMode;
   conversionFormat: ConversionOutputFormat;
   extractionFormat: ExtractionOutputFormat;
+  captions: CaptionSettings;
 };
 
 export type MediaFileInfo = {

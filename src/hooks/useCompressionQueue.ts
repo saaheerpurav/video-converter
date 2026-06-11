@@ -19,6 +19,7 @@ type CompressionState = {
   items: QueueItem[];
   settings: AppSettings;
   capabilities: EncoderCapabilities | null;
+  fonts: string[];
   activeItemId: string | null;
   activeJobId: string | null;
   isProcessing: boolean;
@@ -45,6 +46,18 @@ const defaultSettings: AppSettings = {
   acceleration: "none",
   conversionFormat: "mp4",
   extractionFormat: "mp3",
+  captions: {
+    maxDuration: 2,
+    font: "Arial",
+    fontSize: 30,
+  fontColor: "#FFFFFF",
+  outlineColor: "#000000",
+  shadowEnabled: true,
+  shadowColor: "#000000",
+    position: "bottom",
+    marginV: 80,
+    maxChars: 42
+  },
   outputFolder: ""
 };
 
@@ -52,6 +65,7 @@ export const useCompressionQueue = create<CompressionState>((set, get) => ({
   items: [],
   settings: defaultSettings,
   capabilities: null,
+  fonts: [],
   activeItemId: null,
   activeJobId: null,
   isProcessing: false,
@@ -62,11 +76,12 @@ export const useCompressionQueue = create<CompressionState>((set, get) => ({
     set({ isLoading: true });
 
     try {
-      const [settings, capabilities] = await Promise.all([
+      const [settings, capabilities, fonts] = await Promise.all([
         electronApi.getSettings(),
-        electronApi.getCapabilities()
+        electronApi.getCapabilities(),
+        electronApi.listFonts().catch(() => [])
       ]);
-      set({ settings, capabilities, isLoading: false });
+      set({ settings: normalizeSettings(settings), capabilities, fonts, isLoading: false });
     } catch (error) {
       set({
         isLoading: false,
@@ -143,7 +158,7 @@ export const useCompressionQueue = create<CompressionState>((set, get) => ({
   },
 
   updateSettings: async (partial) => {
-    const settings = { ...get().settings, ...partial };
+    const settings = normalizeSettings({ ...get().settings, ...partial });
     set((state) => ({
       settings,
       items: state.items.map((item) =>
@@ -339,6 +354,10 @@ function getTargetFormat(settings: AppSettings) {
 }
 
 function validateQueueItem(item: QueueItem) {
+  if (item.mode === "caption" && (!item.width || !item.height)) {
+    return "Captions require a video file.";
+  }
+
   if (item.mode !== "convert" || !item.targetFormat) {
     return null;
   }
@@ -348,4 +367,15 @@ function validateQueueItem(item: QueueItem) {
   }
 
   return unsupportedConversionMessage(item.extension, item.targetFormat);
+}
+
+function normalizeSettings(settings: AppSettings): AppSettings {
+  return {
+    ...defaultSettings,
+    ...settings,
+    captions: {
+      ...defaultSettings.captions,
+      ...settings.captions
+    }
+  };
 }

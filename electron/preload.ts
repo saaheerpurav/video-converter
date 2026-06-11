@@ -18,6 +18,7 @@ const mediaApi = {
   getPathForFile: (file: File) => webUtils.getPathForFile(file),
   analyzeFiles: (paths: string[]) => ipcRenderer.invoke("media:analyze-files", paths) as Promise<MediaFileInfo[]>,
   getCapabilities: () => ipcRenderer.invoke("ffmpeg:get-capabilities") as Promise<EncoderCapabilities>,
+  listFonts: () => ipcRenderer.invoke("fonts:list") as Promise<string[]>,
   startCompression: (payload: StartCompressionPayload) =>
     ipcRenderer.invoke("compression:start", payload) as Promise<CompressionStarted>,
   startMediaJob: (payload: StartMediaJobPayload) =>

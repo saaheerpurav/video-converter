@@ -103,7 +103,9 @@ function TaskPill({ mode, targetFormat }: { mode: string; targetFormat?: string 
       ? "Compress"
       : mode === "convert"
         ? `Convert to ${targetFormat?.toUpperCase() ?? ""}`
-        : `Extract ${targetFormat?.toUpperCase() ?? ""}`;
+        : mode === "caption"
+          ? "Generate Captions"
+          : `Extract ${targetFormat?.toUpperCase() ?? ""}`;
 
   return (
     <span className="rounded-full bg-slate-900 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-300">
